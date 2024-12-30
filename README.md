@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Site de Empregos
 
-## Getting Started
+Bem-vindo ao repositório do **Site de Empregos**, uma plataforma para conectar candidatos a oportunidades de trabalho com eficácia e simplicidade.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Para Candidatos
+- **Cadastro de Perfil**: Crie um perfil com suas informações pessoais, experiência profissional e habilidades.
+- **Busca de Vagas**: Encontre vagas por meio de filtros como localização, área de atuação e palavras-chave.
+- **Aplicar para Vagas**: Envie sua candidatura diretamente pela plataforma.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Para Empresas
+- **Cadastro de Empresas**: Registre sua empresa e adicione detalhes como missão, visão e valores.
+- **Postagem de Vagas**: Publique vagas detalhadas com requisitos, descrição do trabalho e localização.
+- **Gestão de Candidaturas**: Visualize os candidatos que aplicaram para suas vagas.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Funcionalidades Gerais
+- **Sistema de Autenticação**: Autenticação segura para candidatos e empresas.
+- **Design Responsivo**: Experiência otimizada para dispositivos móveis, tablets e desktops.
+- **Tema Personalizado**: Design moderno com suporte à customização de cores e estilos.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tecnologias Utilizadas
 
-## Learn More
+### Frontend
+- **Next.js**: Framework React para aplicações web com renderização no lado do servidor (SSR) e criação de rotas dinâmicas.
+- **Shadcn**: Biblioteca de componentes estilizados para construção rápida de interfaces consistentes e acessíveis.
+- **Tailwind CSS**: Framework de utilitários para estilização de componentes com produtividade e flexibilidade.
 
-To learn more about Next.js, take a look at the following resources:
+### Futuras Tecnologias e Funcionalidades Planejadas
+- **Banco de Dados**: Implementação de um banco de dados para armazenar perfis, vagas e candidaturas.
+- **Integração com API**: Permitir que empresas publiquem vagas e candidatos importem currículos via APIs.
+- **Notificações**: Envio de notificções por email para novas vagas e status de candidaturas.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Como clonar e ultilizar o template nos seus projetos
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/site-de-empregos.git
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Execute o ambiente de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+## Licença
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
