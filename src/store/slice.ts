@@ -3,10 +3,12 @@ import { Jobs } from '../../types';
 
 interface JobState {
   savedJobs: Jobs[];
+
 }
 
 const initialState: JobState = {
   savedJobs: [],
+ 
 };
 
 const jobSlice = createSlice({
@@ -23,7 +25,7 @@ const jobSlice = createSlice({
     },
     initialized: (state, action: PayloadAction<Jobs[]>) => {
       state.savedJobs = action.payload;
-    },
+    }
   },
 });
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,11 @@ import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export function LoginModal() {
+  const router = useRouter() // Inicializa o router
+  const [credentials, setCredentials] = useState({
+    userEmail: 'admin@email.com',
+    userPass: 'admin123'
+  })
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -18,35 +24,23 @@ export function LoginModal() {
 
   useEffect(() => {
     const username = email.split('@')[0]
-    localStorage.setItem('uusername', username)
-    setName(username)
-  },[email])
 
-  
+    const initialName = username.substring(0 , 2)
+    
+    localStorage.setItem('username', username)
+    localStorage.setItem('initialname', initialName)
+    setName(username)
+  }, [email])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    if (email != 'admin@email.com' && password != 'admin123') {
-      if(email.length > 0) {
-        const username = email.split('@')[0];
-        localStorage.setItem('username', username)
-        console.log(username)
-      } 
-      setError('Por favor, preencha todos os campos.')      
-    } 
-
-    // Aqui você implementaria a lógica de autenticação
-    try {
-      // Simulating an API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('Login attempt', { email, password })
-      // If login is successful, you would typically:
-      // - Set the user in your global state
-      // - Redirect to the dashboard
-    } catch (err) {
-      setError('Falha no login. Por favor, verifique suas credenciais.')
+    // Verificação das credenciais
+    if (credentials.userEmail === email && credentials.userPass === password) {
+      router.push('/dashboard') // Navega para o dashboard se as credenciais forem válidas
+    } else {
+      setError('Verifique suas credenciais') // Exibe mensagem de erro se as credenciais não forem válidas
     }
   }
 
@@ -91,7 +85,7 @@ export function LoginModal() {
               required 
             />
           </div>
-          <Button type="submit" className="w-full"> <a href="/dashboard">Entrar</a></Button>
+          <Button type="submit" className="w-full">Entrar</Button>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           Não tem uma conta? <DialogTrigger asChild><Button variant="link" className="p-0">Cadastre-se</Button></DialogTrigger>
@@ -100,4 +94,3 @@ export function LoginModal() {
     </Dialog>
   )
 }
-

@@ -5,7 +5,13 @@ import HowItWorks from '../components/how-it-works'
 import Testimonials from '../components/testimonials'
 import CallToAction from '../components/call-to-action'
 import Footer from '../components/footer'
+import { Metadata } from 'next'
 
+
+export const metadata: Metadata = {
+  title: 'JobSite | O maior site de empregos do Pis',
+  description: 'O emprego perfeito está na JobSite',
+}
 
 export default function HomePage() {
   return (

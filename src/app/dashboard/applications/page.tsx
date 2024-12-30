@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { removed, initialized } from "@/store/slice";
 import { Jobs } from "../../../../types";
+
+import Head from 'next/head'
 import DashboardHeader from "@/components/dashboard-header";
 import Footer from "@/components/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -13,6 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, DollarSign, GraduationCap } from 'lucide-react';
 
 function ApplicationsList() {
+
+  useEffect(() => {
+    document.title = 'EmpreGo - Minhas vagas'
+  })
   const dispatch = useDispatch();
   const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
   const [isLoading, setIsLoading] = useState(true);

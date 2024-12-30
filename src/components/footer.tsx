@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4">Sobre Nós</h3>
-            <p className="text-gray-400">JobSite é a plataforma líder em busca de empregos, conectando talentos às melhores oportunidades.</p>
+            <p className="text-gray-400">EmpreGo é a plataforma líder em busca de empregos, conectando talentos às melhores oportunidades.</p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
