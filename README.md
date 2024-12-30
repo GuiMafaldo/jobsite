@@ -29,13 +29,13 @@ Bem-vindo ao repositório do **Site de Empregos**, uma plataforma para conectar 
 ### Futuras Tecnologias e Funcionalidades Planejadas
 - **Banco de Dados**: Implementação de um banco de dados para armazenar perfis, vagas e candidaturas.
 - **Integração com API**: Permitir que empresas publiquem vagas e candidatos importem currículos via APIs.
-- **Notificações**: Envio de notificções por email para novas vagas e status de candidaturas.
+- **Notificações**: Envio de notificações por email para novas vagas e status de candidaturas.
 
-## Como clonar e ultilizar o template nos seus projetos
+## Como clonar e utilizar o template nos seus projetos
 1. Clone o repositório:
    ```bash
    git clone https://github.com/seu-usuario/site-de-empregos.git
-   ```
+   ``
 2. Instale as dependências:
    ```bash
    npm install
