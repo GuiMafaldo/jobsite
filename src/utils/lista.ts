@@ -19,9 +19,9 @@ const jobs = [
       salary: "R$ 6.000 - R$ 9.000",
       benefits: ["Plano de saúde", "Vale transporte", "Cursos de aperfeiçoamento"],
       contractType: "PJ",
-      level:'Senior'
+      level:'Senior',
     },
-    { 
+   { 
       id: "3", 
       title: "Gerente de Produto", 
       company: "InnovateNow", 
@@ -284,7 +284,8 @@ const jobs = [
         benefits: ["Plano de saúde", "Vale alimentação", "Dia de folga no aniversário", "Auxílio educação"],
         contractType: "CLT",
         level:"Pleno"
-      },     
+      },   
+        
   ]
 
   export default jobs
