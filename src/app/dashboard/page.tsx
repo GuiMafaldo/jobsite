@@ -1,14 +1,14 @@
 'use client'
 import { useEffect } from 'react';
 
-import DashboardHeader from '../../components/dashboard-header'
-import ApplicationStatus from '@/components/application-status';
-import JobRecommendations from '@/components/job-recomendations';
-import RecentSearches from '@/components/recent-searches';
-import SavedJobs from '@/components/saved-jobs';
+import DashboardHeader from '../../components/Headers/dashboard-header'
+import ApplicationStatus from '@/components/Works/application-status';
+import JobRecommendations from '@/components/Headers/dashboard-header';
+import RecentSearches from '@/components/Works/recent-searches';
+import SavedJobs from '@/components/Works/saved-jobs';
 import Footer from '@/components/footer';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   useEffect(() => {
     document.title = "EmpreGo - Dashboard";
   }, [])

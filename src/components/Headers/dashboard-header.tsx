@@ -1,11 +1,15 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell, MessageSquare } from 'lucide-react'
+import { useState } from 'react'
 
 export default function DashboardHeader() {
+  const [logged, setLogged] = useState(false)
 
-  const username = localStorage.getItem('initialname')?.toUpperCase()
+
   return (
     <header className="bg-white shadow-sm mb-24">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -26,7 +30,7 @@ export default function DashboardHeader() {
           </Button>
           <Avatar>
             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@usuário" />
-            <AvatarFallback>{username}</AvatarFallback>
+            <AvatarFallback>{logged ? localStorage.getItem('initialname')?.toUpperCase(): ''}</AvatarFallback>
           </Avatar>
             <Button type='button' variant={'outline'}><a href="/">Logout</a> </Button>
         </div>

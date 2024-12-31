@@ -7,7 +7,7 @@ import { removed, initialized } from "@/store/slice";
 import { Jobs } from "../../../../types";
 
 import Head from 'next/head'
-import DashboardHeader from "@/components/dashboard-header";
+import DashboardHeader from "@/components/Headers/dashboard-header";
 import Footer from "@/components/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

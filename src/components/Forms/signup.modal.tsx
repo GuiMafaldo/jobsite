@@ -19,6 +19,7 @@ interface UsuarioData {
 
 interface Props {
   title?: 'Cadastrar' | 'Cadastre-se gratuitamente'
+  bgColor?: 'blue' | 'white'
 }
 
 
@@ -62,11 +63,11 @@ export function SignupModal({title}: Props){
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{title ? 'Cadastre-se gartuitamente':'Cadastrar'  }</Button>
+        <Button className='bg-blue-600 text-white font-bold hover:bg-white hover:text-black'>{title ? 'Cadastre-se gartuitamente':'Cadastrar'}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Criar uma conta no JobSite</DialogTitle>
+          <DialogTitle>Criar uma conta no EmpreGo</DialogTitle>
           <DialogDescription>
             Preencha os campos abaixo para se cadastrar.
           </DialogDescription>
@@ -121,7 +122,7 @@ export function SignupModal({title}: Props){
               required 
             />
           </div>
-          <Button type="submit" className="w-full">Cadastrar</Button>
+          <Button type="submit" className="w-full bg-blue-500" variant='secondary'>Cadastrar</Button>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           Já tem uma conta? <DialogTrigger asChild><Button variant="link" className="p-0">Faça login</Button></DialogTrigger>

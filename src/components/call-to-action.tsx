@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 
-import  { SignupModal } from "./signup.modal"
+import  { SignupModal } from "./Forms/signup.modal"
  '../components/signup.modal'
 
 export default function CallToAction() {
@@ -10,8 +10,8 @@ export default function CallToAction() {
         <h2 className="text-3xl font-bold mb-4">Pronto para Impulsionar sua Carreira?</h2>
         <p className="text-xl mb-8">Junte-se a milhares de profissionais que já encontraram seu emprego ideal no JobSite.</p>
         <div className="space-x-4">
-          <SignupModal  title="Cadastre-se gratuitamente" />           
-          <Button size="lg" variant="secondary">Saiba Mais</Button>
+          <SignupModal title="Cadastre-se gratuitamente" />           
+          <Button className="font-bold" size="lg" variant="secondary">Saiba Mais</Button>
         </div>
       </div>
     </section>

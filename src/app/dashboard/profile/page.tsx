@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import DashboardHeader from '@/components/dashboard-header'
+import DashboardHeader from '@/components/Headers/dashboard-header'
 import Footer from '@/components/footer'
 
 interface Experiencia {

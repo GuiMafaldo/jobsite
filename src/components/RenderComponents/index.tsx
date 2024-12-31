@@ -1,7 +1,7 @@
-import ApplicationStatus from "../application-status"
+import ApplicationStatus from "../Works/application-status"
 import JobRecommendations from "../job-recomendations"
-import RecentSearches from "../recent-searches"
-import SavedJobs from "../saved-jobs"
+import RecentSearches from "../Works/recent-searches"
+import SavedJobs from "../Works/saved-jobs"
 
 
 const ContainerComponents = () => {
