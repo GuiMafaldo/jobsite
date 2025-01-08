@@ -8,7 +8,7 @@ const jobs = [
       salary: "R$ 8.000 - R$ 12.000",
       benefits: ["Plano de saúde", "Vale refeição", "Gympass", "Horário flexível"],
       contractType: "CLT",
-      level:"junior"
+      level:"junior",
     },
     { 
       id: "2", 

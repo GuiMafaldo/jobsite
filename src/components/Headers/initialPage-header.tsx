@@ -7,6 +7,7 @@ import { LoginModal } from '../Forms/login-modal'
 import { SignupModal } from '../Forms/signup.modal'
 
 
+
 export default function InitialPageHeader() {
   return (
     <header className="bg-white shadow-sm mb-24">
@@ -29,6 +30,7 @@ export default function InitialPageHeader() {
           <div className='flex gap-2'>
             <LoginModal />
             <SignupModal />
+            
           </div>
         </div>
       </div>

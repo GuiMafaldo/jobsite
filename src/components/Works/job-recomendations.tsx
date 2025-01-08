@@ -1,14 +1,7 @@
-import { useEffect, useState } from "react";
-
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { Jobs } from "../../types";
-import { initialized } from '../store/slice'
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import lista from "../utils/lista";
+import lista from "@/utils/lista";
 
 
 export default function JobRecommendations() {

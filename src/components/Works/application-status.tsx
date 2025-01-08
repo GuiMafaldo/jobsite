@@ -1,15 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-
-const applications = [
-  { id: 1, jobTitle: "Desenvolvedor Full Stack", company: "TechCorp", status: "Em Análise" },
-  { id: 2, jobTitle: "UX Researcher", company: "UXStudio", status: "Entrevista Agendada" },
-  { id: 3, jobTitle: "DevOps Engineer", company: "CloudTech", status: "Candidatura Enviada" },
-]
-
-type BadgeVariant = "default" | "destructive" | "outline" | "secondary" | "success" | null | undefined;
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 export default function ApplicationStatus() {
+  const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
+
   return (
     <Card>
       <CardHeader>
@@ -17,21 +12,64 @@ export default function ApplicationStatus() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {applications.map((application) => (
-            <div key={application.id} className="flex justify-between items-center border-b pb-4 last:border-b-0 last:pb-0">
-              <div>
-                <h3 className="font-semibold">{application.jobTitle}</h3>
-                <p className="text-sm text-gray-600">{application.company}</p>
+          {savedJobs.length > 0 ? (
+            savedJobs.map((application) => (
+              <div
+                key={application.id}
+                className="flex justify-between items-center border-b pb-4 last:border-b-0 last:pb-0"
+              >
+                <div>
+                  <h3 className="font-semibold text-lg">{application.title}</h3>
+                  <p className="text-sm text-gray-600">{application.company}</p>
+                </div>
+                <div
+                  className={`flex justify-center items-center h-6 px-4 rounded-sm text-white font-bold bg-${getStatusColor(
+                    application.status
+                  )}`}
+                >
+                </div>
+                  <span>{getStatusText(application.status)}</span>
               </div>
-              <Badge variant={application.status === "Em Análise" ? "secondary" : 
-                            application.status === "Entrevista Agendada" ? "destructive" : "default"}>
-                {application.status}
-              </Badge>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>Nenhuma vaga ainda</p>
+          )}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
+function getStatusColor(status: any) {
+  switch (status) {
+    case "enviado":
+      return "blue-400";
+    case "emAnalise":
+      return "yellow-400";
+    case "selecionado":
+      return "green-400";
+    case "naoSelecionado":
+      return "red-400";
+    case "agendado":
+      return "purple-400";
+    default:
+      return "gray-400";
+  }
+}
+
+function getStatusText(status: any) {
+  switch (status) {
+    case "enviado":
+      return "CV Enviado";
+    case "emAnalise":
+      return "Em Análise";
+    case "selecionado":
+      return "Selecionado";
+    case "naoSelecionado":
+      return "Não Selecionado";
+    case "agendado":
+      return "Entrevista Agendada";
+    default:
+      return "Status Desconhecido";
+  }
+}

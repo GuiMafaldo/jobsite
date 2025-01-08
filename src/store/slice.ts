@@ -1,15 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { Jobs } from '../../types';
 
-interface JobState {
+export interface JobState {
   savedJobs: Jobs[];
-
 }
 
 const initialState: JobState = {
   savedJobs: [],
- 
 };
+
+export const loadSavedJobs = createAsyncThunk(
+  'jobs/loadSavedJobs',
+  async () => {
+    const savedJobs = localStorage.getItem('savedJobs');
+    if (savedJobs) {
+      return JSON.parse(savedJobs) as Jobs[];
+    }
+    return [] as Jobs[];
+  }
+);
 
 const jobSlice = createSlice({
   name: 'jobs',
@@ -25,10 +34,25 @@ const jobSlice = createSlice({
     },
     initialized: (state, action: PayloadAction<Jobs[]>) => {
       state.savedJobs = action.payload;
-    }
+    },
+    setSavedJobs: (state, action: PayloadAction<Jobs[]>) => {
+      state.savedJobs = action.payload;
+      localStorage.setItem('savedJobs', JSON.stringify(action.payload));
+    },
+    updateStatus: (state, action: PayloadAction<{ id: number; status: any }>) => {
+      const job = state.savedJobs.find(job => job.id === action.payload.id);
+      if (job) {
+        job.status = action.payload.status;
+        localStorage.setItem('savedJobs', JSON.stringify(state.savedJobs));
+      }
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loadSavedJobs.fulfilled, (state, action) => {
+      state.savedJobs = action.payload;
+    });
   },
 });
 
-export const { added, removed, initialized } = jobSlice.actions;
+export const { added, removed, setSavedJobs, initialized, updateStatus } = jobSlice.actions;
 export default jobSlice.reducer;
-

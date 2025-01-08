@@ -8,5 +8,12 @@ export interface Jobs {
   benefits: string[];
   contractType: string;
   level: string;
-}
 
+  status?: {
+    enviado: string
+    emAnalise: string
+    selecionado: string
+    naoSelecionado: string
+    agendado: string
+  }
+}

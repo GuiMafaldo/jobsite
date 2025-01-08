@@ -11,21 +11,23 @@ import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export function LoginModal() {
-  const router = useRouter() // Inicializa o router
+  const router = useRouter()
+  const [isCompany, setIsCompany] = useState(false)
   const [credentials, setCredentials] = useState({
     userEmail: 'admin@email.com',
-    userPass: 'admin123'
+    userPass: 'admin123',
+    companyEmail: 'company@email.com',
+    companyPass: 'company123'
   })
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [error, setError] = useState('')
-  const [name, setName] = useState<string | any>('')
+  const [name, setName] = useState<string>('')
 
   useEffect(() => {
     const username = email.split('@')[0]
-
-    const initialName = username.substring(0 , 2)
+    const initialName = username.substring(0, 2)
     
     localStorage.setItem('username', username)
     localStorage.setItem('initialname', initialName)
@@ -36,12 +38,26 @@ export function LoginModal() {
     e.preventDefault()
     setError('')
 
-    // Verificação das credenciais
-    if (credentials.userEmail === email && credentials.userPass === password) {
-      router.push('/dashboard') // Navega para o dashboard se as credenciais forem válidas
+    if (isCompany) {
+      if (credentials.companyEmail === email && credentials.companyPass === password) {
+        router.push('/dashboard/companyHome')
+      } else {
+        setError('Verifique suas credenciais de empresa')
+      }
     } else {
-      setError('Verifique suas credenciais') // Exibe mensagem de erro se as credenciais não forem válidas
+      if (credentials.userEmail === email && credentials.userPass === password) {
+        router.push('/dashboard/userHome')
+      } else {
+        setError('Verifique suas credenciais de usuário')
+      }
     }
+  }
+
+  const toggleLoginType = () => {
+    setIsCompany(!isCompany)
+    setError('')
+    setEmail('')
+    setPassword('')
   }
 
   return (
@@ -56,6 +72,20 @@ export function LoginModal() {
             Entre com suas credenciais para acessar sua conta.
           </DialogDescription>
         </DialogHeader>
+        <div className="flex justify-center space-x-4 mb-4">
+          <Button 
+            onClick={toggleLoginType} 
+            variant={isCompany ? "outline" : "default"}
+          >
+            Usuário
+          </Button>
+          <Button 
+            onClick={toggleLoginType} 
+            variant={isCompany ? "default" : "outline"}
+          >
+            Empresa
+          </Button>
+        </div>
         {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -69,7 +99,7 @@ export function LoginModal() {
             <Input 
               id="email" 
               type="email" 
-              placeholder="seu@email.com"
+              placeholder={isCompany ? "empresa@email.com" : "seu@email.com"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required 
@@ -85,7 +115,9 @@ export function LoginModal() {
               required 
             />
           </div>
-          <Button type="submit" className="w-full">Entrar</Button>
+          <Button type="submit" className="w-full">
+            {isCompany ? "Entrar como Empresa" : "Entrar como Usuário"}
+          </Button>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           Não tem uma conta? <DialogTrigger asChild><Button variant="link" className="p-0">Cadastre-se</Button></DialogTrigger>
@@ -94,3 +126,4 @@ export function LoginModal() {
     </Dialog>
   )
 }
+

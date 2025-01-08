@@ -19,8 +19,7 @@ const PartnersAndJobs = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <PartnerCarousel />
-      <JobsDashboard />
-      
+      <JobsDashboard /> 
       <div className="w-full max-w-4xl mx-auto my-8">
         <h2 className="text-2xl font-bold mb-4 text-center">Informações das Empresas</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

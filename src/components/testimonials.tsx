@@ -5,19 +5,19 @@ const testimonials = [
   {
     name: "João Silva",
     role: "Desenvolvedor Web",
-    content: "Graças ao JobSite, encontrei minha vaga dos sonhos em apenas duas semanas. A plataforma é intuitiva e as recomendações são muito precisas!",
+    content: "Graças ao EmpreGo, encontrei minha vaga dos sonhos em apenas duas semanas. A plataforma é intuitiva e as recomendações são muito precisas!",
     avatar: "/placeholder.svg?height=40&width=40"
   },
   {
     name: "Maria Santos",
     role: "Designer UX",
-    content: "O JobSite revolucionou minha busca por emprego. A variedade de oportunidades e a facilidade de candidatura fizeram toda a diferença na minha carreira.",
+    content: "A EmpreGo revolucionou minha busca por emprego. A variedade de oportunidades e a facilidade de candidatura fizeram toda a diferença na minha carreira.",
     avatar: "/placeholder.svg?height=40&width=40"
   },
   {
     name: "Carlos Oliveira",
     role: "Gerente de Projetos",
-    content: "Como recrutador, o JobSite simplificou nosso processo de contratação. Encontramos candidatos qualificados rapidamente e melhoramos nossa eficiência.",
+    content: "Como recrutador, a EmpreGo simplificou nosso processo de contratação. Encontramos candidatos qualificados rapidamente e melhoramos nossa eficiência.",
     avatar: "/placeholder.svg?height=40&width=40"
   },
 ]

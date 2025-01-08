@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { LoginModal } from '../Forms/login-modal'
 import { SignupModal } from '../Forms/signup.modal'
 
+
 export default function Header() {
   return (
     <header className="bg-white shadow-sm">

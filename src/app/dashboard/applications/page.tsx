@@ -6,8 +6,7 @@ import { RootState } from "@/store/store";
 import { removed, initialized } from "@/store/slice";
 import { Jobs } from "../../../../types";
 
-import Head from 'next/head'
-import DashboardHeader from "@/components/Headers/dashboard-header";
+import DashboardHeader from "@/components/Headers/userHome-header";
 import Footer from "@/components/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,10 +18,12 @@ function ApplicationsList() {
   useEffect(() => {
     document.title = 'EmpreGo - Minhas vagas'
   })
+  
   const dispatch = useDispatch();
   const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
   const [isLoading, setIsLoading] = useState(true);
 
+  // FAZ A VERIFICAÇÃO PRA VER SI JA TEM OS DADOS SALVOS
   useEffect(() => {
     const storedJobs = localStorage.getItem('savedJobs');
     if (storedJobs) {
