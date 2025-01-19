@@ -49,8 +49,7 @@ export default function InitialPageJobs() {
   };
 
   return (
-    <section>
-        
+    <section>      
         <InitialPageHeader />
         <div className='flex flex-1 items-center m-auto bg-blue-600 justify-center h-32 mb-24'>
             <h1 className='text-white font-bold text-3xl'>Confira as vagas disponiveis</h1>

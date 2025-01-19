@@ -1,16 +1,30 @@
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
 import Link from 'next/link'
+
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell, MessageSquare } from 'lucide-react'
 
+
 export default function DashboardHeader() {
+  const router = useRouter()
+  const [logout, setLogout] = useState<boolean>(true)
 
-  const username = localStorage.getItem('username')?.slice(0, 2).toUpperCase()
+  const username = localStorage.getItem('mail')?.slice(0, 2).toUpperCase()
 
+  const userLogout = () => {
+    setLogout(!logout)  
+      confirm("Deseja sair ?")
+      router.push('/')
+     }
+
+  
   return (
     <header className="bg-white shadow-sm mb-24">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/dashboard" className="text-2xl font-bold text-blue-600">EmpreGo</Link>
+        <Link href="/dashboard/userHome" className="text-2xl font-bold text-blue-600">EmpreGo</Link>
         <nav>
           <ul className="flex space-x-6">
             <li><Link href="/dashboard/searchJobs" className="text-gray-600 hover:text-blue-600">Buscar Empregos</Link></li>
@@ -27,9 +41,9 @@ export default function DashboardHeader() {
           </Button>
           <Avatar>
             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@usuário" />
-            <AvatarFallback>{username}</AvatarFallback>
+            <AvatarFallback>{username ? username : ''}</AvatarFallback>
           </Avatar>
-          <Button type='button' variant={'outline'}><a href="/">Logout</a> </Button>
+          <Button type='button' variant={'outline'} onClick={userLogout}>Logout</Button>
         </div>
       </div>
     </header>

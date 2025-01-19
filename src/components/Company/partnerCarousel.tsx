@@ -16,7 +16,7 @@ const PartnerCarousel = () => {
         className="w-full"
       >
         <CarouselContent>
-          {partnerCompanies.map((company: any) => (
+          {partnerCompanies.map((company) => (
             <CarouselItem key={company.id} className="md:basis-1/2 lg:basis-1/3">
               <div className="p-1">
                 <Card>

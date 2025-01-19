@@ -43,7 +43,7 @@ export default function Testimonials() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 italic">"{testimonial.content}"</p>
+                <p className="text-gray-600 italic">{`${testimonial.content}`}</p>
               </CardContent>
             </Card>
           ))}

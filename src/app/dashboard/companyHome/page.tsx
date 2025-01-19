@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -13,11 +13,10 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
-import { Briefcase, MapPin, Users, PlusCircle, MessageSquare, Building2, DollarSign } from 'lucide-react'
+import { Briefcase, MapPin, Users, PlusCircle, MessageSquare } from 'lucide-react'
 import Footer from '@/components/footer'
 import CompanyHomeHeader from '@/components/Headers/companyHome-header'
 
-// Placeholder data
 const applications = [
   { id: 1, name: "João Silva", job: "Desenvolvedor Frontend", status: "Pendente", avatar: "/avatars/joao.png" },
   { id: 2, name: "Maria Oliveira", job: "Designer UX/UI", status: "Entrevistado", avatar: "/avatars/maria.png" },
@@ -43,10 +42,14 @@ export default function CompanyDashboard() {
   })
   const [message, setMessage] = useState('')
 
+  useEffect(() => {
+    document.title = 'Dashboard - Company'
+  })
+
   const handlePostJob = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Posting new job:', newJob)
-    // Here you would typically send this data to your backend
+  
     setNewJob({
       title: '',
       description: '',
@@ -61,7 +64,7 @@ export default function CompanyDashboard() {
 
   const handleSendMessage = (applicantId: number) => {
     console.log('Sending message to applicant', applicantId, ':', message)
-    // Here you would typically send this message to your backend
+    
     setMessage('')
   }
 
@@ -224,7 +227,7 @@ export default function CompanyDashboard() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="job-type">Tipo de Contratação</Label>
-                    <Select onValueChange={(value: any) => setNewJob({ ...newJob, type: value })}>
+                    <Select onValueChange={(value) => setNewJob({ ...newJob, type: value })}>
                       <SelectTrigger id="job-type">
                         <SelectValue placeholder="Selecione o tipo" />
                       </SelectTrigger>
@@ -260,7 +263,7 @@ export default function CompanyDashboard() {
                   <Checkbox
                     id="job-remote"
                     checked={newJob.isRemote}
-                    onCheckedChange={(checked: any) => setNewJob({ ...newJob, isRemote: checked as boolean })}
+                    onCheckedChange={(checked) => setNewJob({ ...newJob, isRemote: checked as boolean })}
                   />
                   <Label htmlFor="job-remote">Trabalho Remoto</Label>
                 </div>

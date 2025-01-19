@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -9,55 +9,66 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { companyLogin, userLogin } from '@/services/api'
 
 export function LoginModal() {
+
   const router = useRouter()
   const [isCompany, setIsCompany] = useState(false)
-  const [credentials, setCredentials] = useState({
-    userEmail: 'admin@email.com',
-    userPass: 'admin123',
-    companyEmail: 'company@email.com',
-    companyPass: 'company123'
-  })
-
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [name, setName] = useState<string>('')
+  
+  // Estados para Usuário
+  const [mailUser, setMailUser] = useState<string>('')
+  const [passUser, setPassUser] = useState<string>('')
 
-  useEffect(() => {
-    const username = email.split('@')[0]
-    const initialName = username.substring(0, 2)
-    
-    localStorage.setItem('username', username)
-    localStorage.setItem('initialname', initialName)
-    setName(username)
-  }, [email])
+  // Estados para Empresa
+  const [mailCompany, setMailCompany] = useState<string>('')
+  const [passCompany, setPassCompany] = useState<string>('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     setError('')
 
-    if (isCompany) {
-      if (credentials.companyEmail === email && credentials.companyPass === password) {
-        router.push('/dashboard/companyHome')
+    try {
+      let response
+      // Lógica para verificar o tipo de login (usuário ou empresa)
+      if (isCompany) {
+        response = await companyLogin({ email: mailCompany, password: passCompany })
+        if (response && response.token) {
+          localStorage.setItem('company', mailCompany.split('@')[0])
+          localStorage.setItem('token', response.token)
+          router.push('/dashboard/companyHome')
+        } else {
+          setError('Credenciais inválidas')
+        }
       } else {
-        setError('Verifique suas credenciais de empresa')
+        response = await userLogin({ email: mailUser, password: passUser })
+        if (response && response.token) {
+          localStorage.setItem('mail', mailUser)
+          localStorage.setItem('token', response.token)
+          router.push('/dashboard/userHome')
+        } else {
+          setError('Credenciais inválidas')
+        }
       }
-    } else {
-      if (credentials.userEmail === email && credentials.userPass === password) {
-        router.push('/dashboard/userHome')
-      } else {
-        setError('Verifique suas credenciais de usuário')
-      }
+
+    } catch (exception) {
+      setError(`Erro ao autenticar. Tente novamente. ${exception || error}`)
+      console.error('Erro ao fazer login:', exception)
+    } finally {
+      setLoading(false)
     }
   }
 
   const toggleLoginType = () => {
     setIsCompany(!isCompany)
     setError('')
-    setEmail('')
-    setPassword('')
+    setMailUser('') // Limpar campos ao trocar de tipo de login
+    setPassUser('')
+    setMailCompany('')
+    setPassCompany('')
   }
 
   return (
@@ -93,15 +104,15 @@ export function LoginModal() {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
-        <form id='login' onSubmit={handleSubmit} className="space-y-4">
+        <form id='login' onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input 
               id="email" 
               type="email" 
               placeholder={isCompany ? "empresa@email.com" : "seu@email.com"}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={isCompany ? mailCompany : mailUser}
+              onChange={(e) => isCompany ? setMailCompany(e.target.value) : setMailUser(e.target.value)}
               required 
             />
           </div>
@@ -110,8 +121,8 @@ export function LoginModal() {
             <Input 
               id="password" 
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={isCompany ? passCompany : passUser}
+              onChange={(e) => isCompany ? setPassCompany(e.target.value) : setPassUser(e.target.value)}
               required 
             />
           </div>
@@ -126,4 +137,3 @@ export function LoginModal() {
     </Dialog>
   )
 }
-

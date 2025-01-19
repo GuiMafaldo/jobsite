@@ -27,7 +27,7 @@ export default function companyHomeHeader() {
             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@usuário" />
             <AvatarFallback></AvatarFallback>
           </Avatar>
-          <Button type='button' variant={'outline'}><a href="/">Logout</a> </Button>
+          <Button type='button' variant={'outline'}><Link href="/">Logout</Link> </Button>
         </div>
       </div>
     </header>

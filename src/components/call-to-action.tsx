@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 
 import  { SignupModal } from "./Forms/signup.modal"
- '../components/signup.modal'
 
 export default function CallToAction() {
   return (

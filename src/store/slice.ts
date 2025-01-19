@@ -5,6 +5,7 @@ export interface JobState {
   savedJobs: Jobs[];
 }
 
+
 const initialState: JobState = {
   savedJobs: [],
 };
@@ -39,13 +40,7 @@ const jobSlice = createSlice({
       state.savedJobs = action.payload;
       localStorage.setItem('savedJobs', JSON.stringify(action.payload));
     },
-    updateStatus: (state, action: PayloadAction<{ id: number; status: any }>) => {
-      const job = state.savedJobs.find(job => job.id === action.payload.id);
-      if (job) {
-        job.status = action.payload.status;
-        localStorage.setItem('savedJobs', JSON.stringify(state.savedJobs));
-      }
-    },
+    
   },
   extraReducers: (builder) => {
     builder.addCase(loadSavedJobs.fulfilled, (state, action) => {
@@ -54,5 +49,5 @@ const jobSlice = createSlice({
   },
 });
 
-export const { added, removed, setSavedJobs, initialized, updateStatus } = jobSlice.actions;
+export const { added, removed, setSavedJobs, initialized } = jobSlice.actions;
 export default jobSlice.reducer;

@@ -15,9 +15,9 @@ export default function InitialPageHeader() {
         <Link href="/" className="text-2xl font-bold text-blue-600">EmpreGo</Link>
         <nav>
           <ul className="flex space-x-6">
-            <li><Link href="/initialPage/jobs" className="text-gray-600 hover:text-blue-600">Empregos</Link></li>
-            <li><Link href="/initialPage/companies" className="text-gray-600 hover:text-blue-600">Empresas</Link></li>
-            <li><Link href="/initialPage/about" className="text-gray-600 hover:text-blue-600">Sobré</Link></li>
+            <li><Link href="/dashboard/userHome/jobs" className="text-gray-600 hover:text-blue-600">Empregos</Link></li>
+            <li><Link href="/dashboard/userHome/companies" className="text-gray-600 hover:text-blue-600">Empresas</Link></li>
+            <li><Link href="/dashboard/userHome/about" className="text-gray-600 hover:text-blue-600">Sobré</Link></li>
           </ul>
         </nav>
         <div className="flex items-center space-x-4">

@@ -1,5 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import JobCard from "@/app/dashboard/searchJobs/page"
 import jobs from "@/utils/lista"
 
@@ -9,9 +7,9 @@ export default function FeaturedJobs() {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center">Empregos em Destaque</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {jobs.map((job) => (
+          {jobs.map((job, index) => (
             <JobCard 
-              key={job.id}
+              key={index}
               id={job.id}
               title={job.title}
               company={job.company}

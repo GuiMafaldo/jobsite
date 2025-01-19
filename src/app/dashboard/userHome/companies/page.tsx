@@ -5,7 +5,6 @@ import PartnersAndJobs from "../../../../components/Company/partnesAndJobs";
 import Footer from "@/components/footer";
 
 import {useEffect} from 'react'
-import { title } from "process";
 
 export default function ContainerCompanyComponents() {
 

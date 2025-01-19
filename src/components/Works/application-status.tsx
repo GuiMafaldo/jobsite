@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import { Jobs } from "../../../types";
 
 export default function ApplicationStatus() {
   const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
@@ -12,7 +13,7 @@ export default function ApplicationStatus() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {savedJobs.length > 0 ? (
+          {savedJobs && savedJobs.length > 0 ? (
             savedJobs.map((application) => (
               <div
                 key={application.id}
@@ -23,12 +24,11 @@ export default function ApplicationStatus() {
                   <p className="text-sm text-gray-600">{application.company}</p>
                 </div>
                 <div
-                  className={`flex justify-center items-center h-6 px-4 rounded-sm text-white font-bold bg-${getStatusColor(
-                    application.status
-                  )}`}
+                  className={`flex justify-center items-center h-6 px-4 rounded-sm text-white font-bold bg-${getStatusColor}`}
+            
                 >
                 </div>
-                  <span>{getStatusText(application.status)}</span>
+                  <span></span>
               </div>
             ))
           ) : (
@@ -40,24 +40,24 @@ export default function ApplicationStatus() {
   );
 }
 
-function getStatusColor(status: any) {
+function getStatusColor({enviado, emAnalise, selecionado, naoSelecionado, agendado}: {enviado: string, emAnalise: string, selecionado: string, naoSelecionado: string, agendado: string}) {
   switch (status) {
-    case "enviado":
+    case enviado:
       return "blue-400";
-    case "emAnalise":
+    case emAnalise:
       return "yellow-400";
-    case "selecionado":
+    case selecionado:
       return "green-400";
-    case "naoSelecionado":
+    case naoSelecionado:
       return "red-400";
-    case "agendado":
+    case agendado:
       return "purple-400";
     default:
       return "gray-400";
   }
 }
 
-function getStatusText(status: any) {
+function getStatusText(status: string) {
   switch (status) {
     case "enviado":
       return "CV Enviado";

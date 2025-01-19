@@ -10,11 +10,9 @@ export default function Layout() {
     document.title = "EmpreGo - Dashboard";
   }, [])
 
-  const username = localStorage.getItem('username')?.toUpperCase()
+  const username = localStorage.getItem('mail')?.split('@')[0]
 
-
-  return (
-  
+  return ( 
     <div className="min-h-screen bg-gray-100">
       <DashboardHeader />
       <main className="container mx-auto px-4 py-8 pb-24">

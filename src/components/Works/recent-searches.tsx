@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 
+
 export default function RecentSearches() {
+
   const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
   const limited = savedJobs.slice(0, 4);
 
@@ -14,26 +16,22 @@ export default function RecentSearches() {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
-          {limited && limited.length > 0 ?(
-            limited.map((search, index) => (
-            <div key={index}>
-              <ul className="flex flex-1 gap-24 justify-between">
-                <div className="flex flex-col gap-2">
-                  <li className="font-bold text-sm">{search.title}</li>
-                  <li>{search.company}</li>
-                </div>
-                <Button
-                  key={search.id}
-                  variant="outline"
-                  size="sm"
-                  className="font-bold w-2/6"
-                >
+          {limited && limited.length > 0 ? (
+            limited.map((job, index) => (
+              <div key={index}>
+                <ul key={job.id}>
+                  <li>{job.title}</li>
+                  <li>{job.company}</li>
+                </ul>
+              <Button
+              variant="outline"
+              size="sm"
+              className="font-bold w-2/6"
+              >
                   Ver vaga
                 </Button>
-              </ul>
-              <hr className="mt-4" />
-            </div>
-          ))): 'Carregando informações...'}
+              </div>
+            ))):'Nenhuma Pesquisa recente'}
         </div>
       </CardContent>
     </Card>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { added, initialized, updateStatus } from '../../../store/slice';
+import { added, initialized } from '../../../store/slice';
 import { RootState } from '../../../store/store';
 import { Jobs } from '../../../../types';
 
@@ -22,13 +22,8 @@ export default function JobForm({ job }: { job: Jobs }) {
   const dispatch = useDispatch();
   const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
 
-  const handleApply = () => {
-    const isAlreadySaved = savedJobs.some((savedJob) => savedJob.id === job.id);
 
-    if (!isAlreadySaved) {
-      dispatch(updateStatus({ id: job.id, status: { enviando: true } }));
-    }
-  };
+  
 
   const [showAll, setShowAll] = useState(false);
   const [filter, setFilter] = useState({
@@ -66,17 +61,17 @@ export default function JobForm({ job }: { job: Jobs }) {
       },
     };
     dispatch(added(jobStatus));
-    dispatch(updateStatus({ id: job.id, status: { enviado: 'Enviado' } }));
     console.log('Job added to saved list and status updated:', jobStatus);
   };
 
   const handleFilter = () => {
+
     const filteredJobs = jobs.filter((job) => {
       const normalizeString = (str: string) =>
         str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       const matchTitle = filter.title
         ? normalizeString(job.title).includes(normalizeString(filter.title))
-        : true;
+        : true 
 
       const matchLevel = filter.level
         ? normalizeString(job.level).includes(normalizeString(filter.level))
@@ -85,14 +80,15 @@ export default function JobForm({ job }: { job: Jobs }) {
       const matchState = filter.state
         ? normalizeString(job.location).includes(normalizeString(filter.state))
         : true;
-
       return matchTitle && matchLevel && matchState;
+
     });
 
     return showAll ? filteredJobs : filteredJobs.slice(0, 20);
   };
 
   const displayJobs = handleFilter();
+
 
   return (
     <section>
@@ -110,7 +106,7 @@ export default function JobForm({ job }: { job: Jobs }) {
                 type="text"
                 placeholder="Digite o nome da vaga"
                 onChange={(e) =>
-                  setFilter((prev) => ({ ...prev, title: e.target.value }))
+                  setFilter((prev) => ({ ...prev, title: e.target.value}))
                 }
               />
               <input
