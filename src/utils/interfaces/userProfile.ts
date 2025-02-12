@@ -1,37 +1,32 @@
 interface Experiences {
-    enterprise: string
-    function: string
-    period: string
+    company_name: string
+    role: string
+    start_date: string
+    end_date: string
     description: string
 }
 
 interface UserProfile {
-    fullname: string
+    document_number: string
     phone: string
     birth_date: string
+    education: string
+    profile_image?: File | string
     address:{
         street: string
         city: string
         state: string
-        code_postal: string
+        zip_code: string
+        country: string
     },
     experiences: Experiences[]
-    photo: string | null
 }
+
 interface Credentials {
     name: string,
     email:string,
-    password:string | any,
-    confirmPass?: string | any
+    password:string
+    confirmPass?: string 
 }
 
 
-interface CompanyData {
-  name: string,
-  email: string,
-  password: string,
-  confirmPass: string,
-  phone: string,
-  address: string,
-  description: string,
-}

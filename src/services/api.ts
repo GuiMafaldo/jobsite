@@ -1,11 +1,12 @@
 import baseUrl from '@/services/conectionApi/conection'
 
 
+
 export const apiRequest = async (
     endpoint: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     body?: any,
-    token?: string
+    token?: string | any
 ) => {
     const url = `${baseUrl}/${endpoint}`;
 
@@ -23,7 +24,6 @@ export const apiRequest = async (
             headers,
         };
 
-        // Adiciona o corpo apenas se for necessário
         if (body && (method === "POST" || method === "PUT")) {
             options.body = JSON.stringify(body);
         }
@@ -42,79 +42,68 @@ export const apiRequest = async (
         return null;
     }
 };
-                //REGISTER USERS AND COMPANIES //
+
+// REGISTRO DE USUÁRIOS E EMPRESAS
 export const register = async(user: Credentials) => {
-    return apiRequest("users/registerUser", "POST", user)
+    return apiRequest("users/register", "POST", user)
 }
 
 export const companyRegister = async(company: CompanyData) => {
-    return apiRequest("company/registerCompany", "POST", company)
+    return apiRequest("company/register", "POST", company)
 }
 
-                //LOGIN USERS AND COMPANIES //
-
+// LOGIN DE USUÁRIOS E EMPRESAS
 export const userLogin = async ({ email, password }: { email: string, password: string }) => {
-    const data = await apiRequest("users/userLogin", 'POST', { email, password });
+    const data = await apiRequest("users/login", 'POST', { email, password });
 
-    if (data && data.token) {
-        // Verificação se o token foi retornado e o armazena no localStorage
-        const { token } = data;
-
-        if (token) {
-            localStorage.setItem('tokenUser', data.token);
-        } else {
-            console.error('Token não encontrado na resposta da API');
-        }
+    if (data?.token) {
+        localStorage.setItem('tokenUser', data.token);
     } else {
-        console.error('Erro ao tentar fazer login');
+        console.error('Erro ao tentar fazer login: Token não encontrado');
     }
 
     return data; 
 }
 
-export const companyLogin = async({email, password}: {email: string, password: string}) => {
-    const data = await apiRequest("company/login", 'POST', {email, password})
+export const companyLogin = async ({ email, password }: { email: string, password: string }) => {
+    const data = await apiRequest("company/login", 'POST', { email, password });
 
-    if(data && data.token){
-        const { token } = data
-
-        if(token) {
-            localStorage.setItem('tokenCompany', data.token)
-        }else{
-            console.error('Token nao encontrado na Resposta da API')
-        }
-    }else{
-        console.error('Erro ao tentar efetuar login')
+    if (data?.token) {
+        localStorage.setItem('tokenCompany', data.token);
+    } else {
+        console.error('Erro ao tentar fazer login: Token não encontrado');
     }
-    return data
+
+    return data;
 }
 
-                // FINALIZAÇÃO DE ṔROFILE DE USUARIO //
-
+// FINALIZAÇÃO DE PROFILE DO USUÁRIO
 export const submitUserProfile = async (profile: UserProfile) => {
-    try{
-        const data = await apiRequest("users/update", "POST", profile)
+    const token = localStorage.getItem('tokenUser');
+    return apiRequest("users/update", "POST", profile, token);
+}
 
-        if(data && data.success){
-            console.log("Dados enviados com sucesso", data)
-        } else{
-            console.error("Erro ao tentar enviar os dados:", data?.message || "Sem resposta da api")
-        }
-        return data
-    }catch(exe){
-        console.error("Erro inesperado ao enviar os dados:", exe)
-        throw exe
+// CADASTRO DE VAGAS
+export const submitJob = async (jobs: Jobs) => {
+    const token = localStorage.getItem('tokenCompany');
+    return apiRequest("company/jobs", 'POST', jobs, token);
+}
+
+// BUSCA VAGAS DA EMPRESA
+export const getJobsCompany = async(): Promise<Jobs[]> => {
+    const token = localStorage.getItem('tokenCompany');
+    return apiRequest("company/jobs", 'GET', undefined, token);
+}
+
+export const getJobsWithCandidates = async(jobId?: string): Promise<Candidates[]> =>{
+    const token = localStorage.getItem('tokenCompany')
+
+    if(!token) {
+        throw new Error("Token nao encontrado.")
     }
 
-}
-export const submitJob = async (jobs: Jobs) => {
-    const res = await apiRequest("company/jobs", 'POST', jobs)
-
-    return res
-}
-
-export const getJobsCompany = async(): Promise<Jobs[]> => {
-    const response = await apiRequest("company/job", 'GET')
-
-    return response
+    if(!jobId) {
+        throw new Error("JobId nao foi fornecido.")
+    }
+    return apiRequest(`company/jobs/${jobId}/candidates`, 'GET', undefined, token)
 }
