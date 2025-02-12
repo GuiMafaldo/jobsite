@@ -18,3 +18,20 @@ interface UserProfile {
     experiences: Experiences[]
     photo: string | null
 }
+interface Credentials {
+    name: string,
+    email:string,
+    password:string | any,
+    confirmPass?: string | any
+}
+
+
+interface CompanyData {
+  name: string,
+  email: string,
+  password: string,
+  confirmPass: string,
+  phone: string,
+  address: string,
+  description: string,
+}

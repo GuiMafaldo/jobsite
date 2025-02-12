@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import DashboardHeader from '@/components/Headers/userHome-header'
-import Footer from '@/components/footer'
-import { userProfile } from "@/services/api"; // Importe a função que faz a requisição
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import DashboardHeader from '@/components/Headers/userHome-header';
+import Footer from '@/components/footer';
+import { submitUserProfile } from '@/services/api'; // Função que envia os dados para a API
 
 export default function PerfilEmprego() {
   useEffect(() => {
-    document.title = 'EmpreGo - Perfil'
-  })
+    document.title = 'EmpreGo - Perfil';
+  }, []);
 
   const [perfil, setPerfil] = useState<UserProfile>({
     fullname: '',
@@ -25,78 +25,71 @@ export default function PerfilEmprego() {
       street: '',
       city: '',
       state: '',
-      code_postal: '',
+      code_postal: ''
     },
-    experiences: [{
-      enterprise: '',
-      function: '',
-      description: '',
-      period: ''
-    }],
-    photo: null
-  })
+    experiences: [],
+    photo: ''
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     if (name.includes('.')) {
-      const [parent, child] = name.split('.')
-      setPerfil((prev: any) => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent as keyof UserProfile],
-          [child]: value
-        }
-      }))
+      const [parent, child] = name.split('.');
+      setPerfil((prev) => ({
+        ...prev
+      }));
     } else {
-      setPerfil(prev => ({ ...prev, [name]: value }))
+      setPerfil((prev) => ({ ...prev, [name]: value }));
     }
-  }
+  };
 
-  const handleExperienciaChange = (index: number, field: keyof Experiences, value: string) => {
-    setPerfil(prev => ({
+  const handleExperienciaChange = (index: number, field: string, value: string) => {
+    setPerfil((prev) => ({
       ...prev,
-      experiences: prev.experiences.map((exp, i) => 
+      experiences: prev.experiences.map((exp, i) =>
         i === index ? { ...exp, [field]: value } : exp
       )
-    }))
-  }
+    }));
+  };
 
   const adicionarExperiencia = () => {
-    setPerfil((prev: any) => ({
+    setPerfil((prev) => ({
       ...prev,
-      experiences: [...prev.experiences, { enterprise: '', function: '', period: '', description: '' }]
-    }))
-  }
+      experiences: [
+        ...prev.experiences,
+        { enterprise: '', function: '', period: '', description: '' }
+      ]
+    }));
+  };
 
   const removerExperiencia = (index: number) => {
-    setPerfil(prev => ({
+    setPerfil((prev) => ({
       ...prev,
       experiences: prev.experiences.filter((_, i) => i !== index)
-    }))
-  }
+    }));
+  };
 
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setPerfil(prev => ({ ...prev, photo: reader.result as string }))
-      }
-      reader.readAsDataURL(file)
+        setPerfil((prev) => ({ ...prev, photo: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
-  // Função para salvar o perfil no banco de dados
   const salvarPerfil = async () => {
     try {
-      const response = await userProfile(perfil); // Envia os dados do perfil para a API
+      const response = await submitUserProfile(perfil);
       alert('Perfil salvo com sucesso!');
-      console.log(response); // Opcional: Exibe a resposta da API no console
+      console.log(response);
     } catch (error) {
       console.error('Erro ao salvar perfil:', error);
       alert('Houve um erro ao salvar o perfil. Tente novamente.');
     }
-  }
+  };
 
   return (
     <>
@@ -113,6 +106,8 @@ export default function PerfilEmprego() {
               <TabsTrigger value="experiencia">Experiência</TabsTrigger>
               <TabsTrigger value="foto">Foto</TabsTrigger>
             </TabsList>
+
+            {/* Aba de Dados Pessoais */}
             <TabsContent value="pessoal">
               <div className="space-y-4">
                 <div>
@@ -125,30 +120,60 @@ export default function PerfilEmprego() {
                 </div>
                 <div>
                   <Label htmlFor="dataNascimento">Data de Nascimento</Label>
-                  <Input id="dataNascimento" name="birth_date" type="date" value={perfil.birth_date} onChange={handleInputChange} />
+                  <Input
+                    id="dataNascimento"
+                    name="birth_date"
+                    type="date"
+                    value={perfil.birth_date}
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
             </TabsContent>
+
+            {/* Aba de Endereço */}
             <TabsContent value="endereco">
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="rua">Rua</Label>
-                  <Input id="rua" name="address.street" value={perfil.address.street}  onChange={handleInputChange} />
+                  <Input
+                    id="rua"
+                    name="address.street"
+                    value={perfil.address.street}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="cidade">Cidade</Label>
-                  <Input id="cidade" name="address.city" value={perfil.address.city} onChange={handleInputChange} />
+                  <Input
+                    id="cidade"
+                    name="address.city"
+                    value={perfil.address.city}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="estado">Estado</Label>
-                  <Input id="estado" name="address.state" value={perfil.address.state} onChange={handleInputChange} />
+                  <Input
+                    id="estado"
+                    name="address.state"
+                    value={perfil.address.state}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="cep">CEP</Label>
-                  <Input id="cep" name="address.code_postal" value={perfil.address.code_postal} onChange={handleInputChange} />
+                  <Input
+                    id="cep"
+                    name="address.code_postal"
+                    value={perfil.address.code_postal}
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
             </TabsContent>
+
+            {/* Aba de Experiência */}
             <TabsContent value="experiencia">
               <div className="space-y-6">
                 {perfil.experiences.map((exp, index) => (
@@ -187,7 +212,9 @@ export default function PerfilEmprego() {
                             onChange={(e) => handleExperienciaChange(index, 'description', e.target.value)}
                           />
                         </div>
-                        <Button variant="destructive" onClick={() => removerExperiencia(index)}>Remover Experiência</Button>
+                        <Button variant="destructive" onClick={() => removerExperiencia(index)}>
+                          Remover Experiência
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -195,6 +222,8 @@ export default function PerfilEmprego() {
                 <Button onClick={adicionarExperiencia}>Adicionar Experiência</Button>
               </div>
             </TabsContent>
+
+            {/* Aba de Foto */}
             <TabsContent value="foto">
               <div className="space-y-4">
                 <Avatar className="w-32 h-32 mx-auto">
@@ -215,5 +244,5 @@ export default function PerfilEmprego() {
       </Card>
       <Footer />
     </>
-  )
+  );
 }

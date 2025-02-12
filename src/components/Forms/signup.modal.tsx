@@ -9,23 +9,8 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
+import { companyRegister, register } from '@/services/api'
 
-interface UserData {
-  name: string,
-  email: string,
-  password: string,
-  confirmPass: string,
-}
-
-interface CompanyData {
-  name: string,
-  email: string,
-  password: string,
-  confirmPass: string,
-  phone: string,
-  address: string,
-  description: string,
-}
 
 interface Props {
   title?: 'Cadastrar' | 'Cadastre-se gratuitamente'
@@ -35,7 +20,7 @@ interface Props {
 export function SignupModal({title}: Props){
   const [error, setError] = useState<string | null>(null)
   const [isCompany, setIsCompany] = useState(false)
-  const [userData, setUserData] = useState<UserData>({
+  const [userData, setUserData] = useState<Credentials>({
     name: '',
     email: '',
     password:'',
@@ -60,19 +45,48 @@ export function SignupModal({title}: Props){
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = isCompany ? companyData : userData;
-    if (data.password !== data.confirmPass) {
-      setError("As senhas não coincidem.");
-      return;
+    
+    try {
+      if(isCompany) {
+        const res =  await companyRegister(companyData)
+        if(res){
+          alert("Empresa cadastrada com sucesso!")
+          setCompanyData({
+            name: '',
+            email: '',
+            password:'',
+            confirmPass:'',
+            phone: '',
+            address: '',
+            description: ''
+          })
+        }else {
+          alert("Não foi possivel realizar o cadastro da compania, tente novamente")
+        }
+      }
+      else {
+        const result = await register(userData)
+        if(result) {
+          alert("Usuario cadastrado com sucesso!")
+          setUserData({
+           name:'',
+           email:'',
+           password:'',
+           confirmPass:''
+         })
+        } else {
+          alert("Não foi possivel cadastrar o usuario, tente novamente!")
+        }
+      }
+    }catch(exe) {
+      console.error("Não conseguimos Registrar sua conta, verifique as informações digitadas.", exe)
+      
+      // Simula um processo de cadastro bem-sucedido
+      console.log(isCompany ? "Dados da empresa cadastrados" : "Dados do usuário cadastrados", isCompany);
     }
-    if (data.password.length < 6) {
-      setError("A senha deve conter mais de 6 caracteres.");
-      return;
-    }
-    // Simula um processo de cadastro bem-sucedido
-    console.log(isCompany ? "Dados da empresa cadastrados" : "Dados do usuário cadastrados", data);
+   
 
     // Redireciona para a página inicial após o cadastro
     window.location.href = '/';
