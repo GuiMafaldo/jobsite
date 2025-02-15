@@ -2,9 +2,13 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell, MessageSquare } from 'lucide-react'
+import LogoutButton from '@/utils/functions/logout-site'
 
 export default function companyHomeHeader() {
+  
+  const companyName = localStorage.getItem('company')?.slice(0, 2)
 
+ 
   return (
     <header className="bg-white shadow-sm mb-24">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -25,9 +29,11 @@ export default function companyHomeHeader() {
           </Button>
           <Avatar>
             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@usuário" />
-            <AvatarFallback></AvatarFallback>
+            <AvatarFallback className='bg-gray-500'>
+              <span className='font-bold text-xl font-sans text-white'>{companyName}</span>
+            </AvatarFallback>
           </Avatar>
-          <Button type='button' variant={'outline'}><Link href="/">Logout</Link> </Button>
+          <LogoutButton />    
         </div>
       </div>
     </header>

@@ -29,8 +29,7 @@ export default function InitialPageHeader() {
           </Button>
           <div className='flex gap-2'>
             <LoginModal />
-            <SignupModal />
-            
+            <SignupModal />    
           </div>
         </div>
       </div>

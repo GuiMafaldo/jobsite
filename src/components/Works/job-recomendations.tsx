@@ -1,11 +1,35 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import lista from "@/utils/lista";
+import { useEffect, useState } from "react";
+import { getAllJobs } from "@/services/api";
+
+
 
 
 export default function JobRecommendations() {
-  const limitedList = lista.slice(0, 4);
+  const [jobs, setJobs] = useState<Jobs[]>([])
+  const [viewMore, setMoreView] = useState(false)
+  const [load, setLoad] = useState(false)
+  const [error, setError] = useState("")
+  
+  const moreView = viewMore ? jobs : jobs.slice(0, 4);
+
+  const renderJobs = async () => {
+    try{
+      setLoad(true)
+      const response = await getAllJobs()
+      setJobs(response)
+    }catch(exe) {
+      console.error('Erro ao capturar as vagas:', exe)
+      setError("Err ao buscar suas recomendações")
+    }finally{
+      setLoad(false)
+    }
+  }
+  useEffect(() => {
+    //renderJobs()
+  })
 
   return (
     <Card>
@@ -14,10 +38,10 @@ export default function JobRecommendations() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {limitedList.length > 0 ? (
-            limitedList.map((vaga) => (
+          {moreView.length > 0 ? (
+            moreView.map((vaga) => (
               <div
-                key={vaga.id}
+                key={vaga.jobId}
                 className="flex justify-between items-start border-b pb-4 last:border-b-0 last:pb-0"
               >
                 <div>

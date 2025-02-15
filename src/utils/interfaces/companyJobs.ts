@@ -3,18 +3,17 @@ type Benefits = {
 }
 
 interface Jobs {
+    id?: string
     company_id?: string,
     title: string,
     description: string,
-    status: string
-    create_at?: string
     salary: string,
-    company_name: string,
     benefits: any,
     location: string,
     model: string
     requirements: string
     contract: string
+    level?: string | any
 }
 
 interface CompanyData {

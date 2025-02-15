@@ -6,13 +6,14 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell, MessageSquare } from 'lucide-react'
+import LogoutButton from '@/utils/functions/logout-site'
 
 
 export default function DashboardHeader() {
   const router = useRouter()
   const [logout, setLogout] = useState<boolean>(true)
 
-  const username = localStorage.getItem('mail')?.slice(0, 2).toUpperCase()
+  const username = localStorage.getItem('username')?.slice(0, 2).toUpperCase()
 
   const userLogout = () => {
     setLogout(!logout)  
@@ -41,9 +42,13 @@ export default function DashboardHeader() {
           </Button>
           <Avatar>
             <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@usuário" />
-            <AvatarFallback>{username ? username : ''}</AvatarFallback>
+            <AvatarFallback className='bg-gray-500'>
+              <span className='font-bold text-xl font-sans text-white'>
+                {username ? username : ''}
+              </span>
+            </AvatarFallback>
           </Avatar>
-          <Button type='button' variant={'outline'} onClick={userLogout}>Logout</Button>
+            <LogoutButton />  
         </div>
       </div>
     </header>

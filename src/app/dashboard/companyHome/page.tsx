@@ -1,40 +1,49 @@
 "use client"
-
 import { useEffect, useState } from "react"
+import { submitJob } from "@/services/api"
+import Footer from "@/components/footer"
+import CompanyHomeHeader from "@/components/Headers/companyHome-header"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 import { Label } from "@/components/ui/label"
-
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
 import { Briefcase, Users, PlusCircle } from "lucide-react"
-import Footer from "@/components/footer"
-import CompanyHomeHeader from "@/components/Headers/companyHome-header"
-import { getJobsCompany, submitJob } from "@/services/api"
-import SubscribesInJobs from "./subscribes"
-import ViewJobs from "./viewJobs"
+import JobCompany from "./jobs/page"
+import CandidatesAtJobs from "./candidates/page"
+
 
 export default function CompanyDashboard() {
+  const [tagBenefits, setTagBenefits] = useState("")
   const [newJob, setNewJob] = useState<Jobs>({
+    company: '',
     title: "",
     description: "",
     location: "",
     salary: "",
     benefits: [],
     requirements: "",
-    model: "",
-    company_name: "",
-    status: "",
-    contract: "",
+    model: "Temporario",
+    contract: "Presencial",
   })
-  
+
+  const handleCompany = localStorage.getItem('company')
+    
   useEffect(() => {
     document.title = "Dashboard - Company"
   }, [])
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && tagBenefits.trim() !== "") {
+      setNewJob((prevState) => ({
+        ...prevState,
+        benefits: [...prevState.benefits, tagBenefits.trim()],
+      }))
+      setTagBenefits("")
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -47,7 +56,6 @@ export default function CompanyDashboard() {
   const handleSubmitJob = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Verificação simples de campos obrigatórios antes de enviar
     if (!newJob.title || !newJob.description) {
       alert("Título e descrição são obrigatórios.")
       return
@@ -59,10 +67,9 @@ export default function CompanyDashboard() {
       if (res) {
         alert("Vaga cadastrada com sucesso.")
         console.log("Posting new job:", newJob)
-
-        // Após enviar, limpa os campos
+  
         setNewJob({
-          company_name: "",
+          company:"",
           title: "",
           location: "",
           description: "",
@@ -71,10 +78,10 @@ export default function CompanyDashboard() {
           model: "",
           benefits: [],
           requirements: "",
-          status: "",
         })
       } else {
         alert("Erro ao cadastrar a vaga, tente novamente.")
+        console.log(newJob)
       }
     } catch (exe) {
       console.error("Erro ao cadastrar vaga, verifique os campos necessários:", exe)
@@ -82,12 +89,26 @@ export default function CompanyDashboard() {
     }
   }
 
+ 
+
+  const handleDeletKeyDown = (index: number) => {
+    setNewJob((prevState) => ({
+      ...prevState,
+      benefits: prevState.benefits.filter((_: any, indice: any) => indice !== index),
+    }))
+  }
+
   return (
     <>
       <CompanyHomeHeader />
-      <div className="container mx-auto p-6 space-y-8">
+      <div className="container mx-auto p-24 space-y-8">
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Dashboard da Empresa</h1>
+          <div className="flex items-center gap-8">
+            <h1 className="text-3xl font-bold font-sans">Dashboard da Empresa</h1>
+            <div className="bg-blue-300 w-auto p-1 h-10 rounded-lg  text-center mt-1">
+              <span className="text-2xl text-white font-bold font-sans">{handleCompany}</span>
+            </div>
+          </div>
           <Button>
             <PlusCircle className="mr-2 h-4 w-4" /> Criar Nova Vaga
           </Button>
@@ -104,118 +125,144 @@ export default function CompanyDashboard() {
               <PlusCircle className="mr-2 h-5 w-5" /> Nova Vaga
             </TabsTrigger>
           </TabsList>
+          <div>
+            <JobCompany />
+          </div>
+         <div>
+            <CandidatesAtJobs />
+          </div>
+              
 
-          <TabsContent value="applications">
-            <SubscribesInJobs />
-          </TabsContent>
-          <TabsContent value="jobs">
-            <ViewJobs />
-          </TabsContent>
+          {/* 🔹 Aba de Nova Vaga */}
           <TabsContent value="post-job">
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl">Postar Nova Vaga</CardTitle>
-                <CardDescription>Crie uma nova oportunidade de emprego</CardDescription>
+                <CardDescription>Crie uma nova oportunidade de emprego.</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmitJob} className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="company_name">Nome da empresa</Label>
-                      <Input
-                        id="company_name"
-                        value={newJob.company_name}
-                        name="company_name"
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
                       <Label htmlFor="job-title">Título da Vaga</Label>
                       <Input id="job-title" value={newJob.title} name="title" onChange={handleChange} required />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="job-location">Localização</Label>
+                    <div className="space-y-2 w-44">
+                      <Label htmlFor="job-title">Salario</Label>
                       <Input
-                        id="job-location"
-                        value={newJob.location}
-                        name="location"
+                        placeholder="R$: 1000,00 & 3000,00"
+                        id="job-title"
+                        value={newJob.salary}
+                        name="salary"
                         onChange={handleChange}
                         required
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="job-title">Beneficios</Label>
+                    <div className="flex">
+                      <Textarea
+                        id="job-title"
+                        value={tagBenefits}
+                        name="benefits"
+                        style={{ resize: "none", width: "400px" }}
+                        onChange={(e) => setTagBenefits(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        required
+                      />
+                      <div className="flex h-8 w-12 mt-3">
+                        {newJob.benefits.map((benefit: any, index: any) => (
+                          <span
+                            key={index}
+                            style={{
+                              margin: "0 5px",
+                              padding: "4px",
+                              border: "1px solid black",
+                              borderRadius: "4px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              textTransform:'uppercase'
+                            }}
+                          >
+                            {benefit}{" "}
+                            <Button className="h-4 w-4 rounded bg-red-200 hover:bg-red-500 pointer flex m-auto " onClick={() => handleDeletKeyDown(index)}>
+                              x
+                            </Button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="flex-col w-92 gap-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="job-title">Requisitos</Label>
+                        <Textarea
+                          id="job-title"
+                          value={newJob.requirements}
+                          name="requirements"
+                          style={{ resize: "none", width: "400px" }}
+                          onChange={(e) => setNewJob({ ...newJob, requirements: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2 w-64">
+                        <Label htmlFor="job-title">local</Label>
+                        <Input
+                          id="job-title"
+                          value={newJob.location}
+                          name="location"
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="text-center m-auto">
+                      <h2 className="text-6xl font-bold text-blue-600">EmpreGo</h2>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <select
+                      name="contract"
+                      id="contract"
+                      style={{ padding: "4px", backgroundColor: "#f9f9f9", borderRadius: "4px" }}
+                      value={newJob.contract}
+                      onChange={(e) => setNewJob({ ...newJob, contract: e.target.value })}
+                    >
+                      <option value="Contrato">Contrato</option>
+                      <option value="Temporario">Temporario</option>
+                      <option value="CLT">CLT</option>
+                      <option value="PJ">PJ</option>
+                      <option value="Estagio">Estagio</option>
+                    </select>
+                    <select
+                      name="model"
+                      id="model"
+                      style={{ padding: "4px", backgroundColor: "#f9f9f9", borderRadius: "4px" }}
+                      value={newJob.model}
+                      onChange={(e) => setNewJob({ ...newJob, model: e.target.value })}
+                    >
+                      <option value="Modelo">Modelo</option>
+                      <option value="Presencial">Presencial</option>
+                      <option value="Remoto">Remoto</option>
+                      <option value="Hibrido">Hibrido</option>
+                    </select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="job-description">Descrição da Vaga</Label>
                     <Textarea
-                      style={{ resize: "none" }}
                       id="job-description"
                       value={newJob.description}
+                      name="description"
+                      style={{ resize: "none", width: "600px" }}
                       onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
                       required
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="job-salary">Faixa Salarial</Label>
-                      <Input
-                        id="job-salary"
-                        value={newJob.salary}
-                        name="salary"
-                        onChange={handleChange}
-                        placeholder="Ex: R$ 3.000 - R$ 5.000"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="job-type">Tipo de Contratação</Label>
-                      <Select onValueChange={(value) => setNewJob({ ...newJob, contract: value })}>
-                        <SelectTrigger id="job-type">
-                          <SelectValue placeholder="Selecione o tipo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Tempo integral">Tempo Integral</SelectItem>
-                          <SelectItem value="Meio periodo">Meio Período</SelectItem>
-                          <SelectItem value="Contrato">Contrato</SelectItem>
-                          <SelectItem value="Temporario">Temporário</SelectItem>
-                          <SelectItem value="Estagio">Estágio</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="type_mode">Modelo de trabalho</Label>
-                      <Select onValueChange={(value) => setNewJob({ ...newJob, model: value })}>
-                        <SelectTrigger id="job-mode">
-                          <SelectValue placeholder="Selecione um modelo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Presencial">Presencial</SelectItem>
-                          <SelectItem value="Remoto">Remoto</SelectItem>
-                          <SelectItem value="Hibrido">Hibrido</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="job-benefits">Benefícios</Label>
-                    <Textarea
-                      id="job-benefits"
-                      value={newJob.benefits}
-                      style={{ resize: "none" }}
-                      onChange={(e) => setNewJob({ ...newJob, benefits: e.target.value })}
-                      placeholder="Liste os benefícios oferecidos"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="job-requirements">Requisitos</Label>
-                    <Textarea
-                      id="job-requirements"
-                      style={{ resize: "none" }}
-                      value={newJob.requirements}
-                      onChange={(e) => setNewJob({ ...newJob, requirements: e.target.value })}
-                      placeholder="Liste os requisitos para a vaga"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
+         
+                  <Button type="submit" className="w-44 flex m-auto">
                     Publicar Vaga
                   </Button>
                 </form>
@@ -228,4 +275,3 @@ export default function CompanyDashboard() {
     </>
   )
 }
-

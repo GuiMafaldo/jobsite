@@ -11,24 +11,42 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Badge } from "@/components/ui/badge"
 
 import Footer from '@/components/footer'
-import jobs from '@/utils/lista'
+
 import InitialPageHeader from '@/components/Headers/initialPage-header'
+import { getAllJobs } from '@/services/api'
 
 
 export default function InitialPageJobs() {
   const [file, setFile] = useState<File | null>(null);
+  const [moreView, setMoreView] = useState(false)
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [showAll, setShowAll] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [jobs, setJobs] = useState<Jobs[] | any>([])
+  const [success, setSuccess] = useState(false)
 
-  const displayJobs = showAll ? jobs : jobs.slice(0, 20)
+  const viewJobs = moreView ? jobs : jobs.slice(0, 5)
 
-  const handleShowMore = () => {
-    setShowAll(!showAll)
-  } 
+  const renderJobs = async () => {
+    try {
+        setLoading(true)
+        const result = await getAllJobs()
+        setJobs(result)
+    } catch(exe) {
+        console.error('Erro ao renderizar vagas', exe)
+        setError("Erro ao buscar vagas. Por favor recarregue a pagina.")
+    } finally {
+        setLoading(false)
+    }
+  }
+
+  const toggleViewMore = (e: any) => {
+    setJobs(!jobs)
+  }
+
 // seta o meta da pagina
   useEffect(() => {
     document.title = "EmpreGo - Vagas";
+    renderJobs()
   }, [])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +58,8 @@ export default function InitialPageJobs() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    setSuccess(false);
+    setSuccess(true)
+    
 
     if (!file) {
       setError('Por favor, selecione um arquivo PDF ou .DOCX');
@@ -55,24 +74,24 @@ export default function InitialPageJobs() {
             <h1 className='text-white font-bold text-3xl'>Confira as vagas disponiveis</h1>
         </div>
         <div className='grid grid-cols-1 w-9/12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-10/12 m-auto pb-24'>
-            {displayJobs && displayJobs.length > 0 ?(
-                displayJobs.map((job, index) => (
+            {viewJobs && viewJobs.length > 0 ?(
+                viewJobs.map((job: any, index: any) => (
                     <Card key={index} className="flex flex-col rounded-xl border bg-card text-card-foreground shadow p-4">
                     <CardHeader>
                         <CardTitle className="text-2xl">{job.title}</CardTitle>
                         <CardDescription className="text-lg">
-                        {job.company} - {job.location}
+                        {job.title} - {job.location}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <p className="text-xs text-gray-600">{job.description}</p>
                         <div className="flex items-center space-x-2">
                         <Briefcase className="h-5 w-5 text-gray-500" />
-                        <span className="font-medium">{job.contractType}</span>
+                        <span className="font-medium">{job.contract}</span>
                         </div>
                         <div className='flex items-center space-x-2'>
-                        <UserCheck className='h-5 w-5 text-gray-500' />
-                        <span className='font-medium'>{job.level}</span>
+                            <UserCheck className='h-5 w-5 text-gray-500' />
+                            <span className='font-medium'>{job.level}</span>
                         </div>
                         <div className="flex items-center space-x-2">
                         <DollarSign className="h-5 w-5 text-gray-500" />
@@ -84,7 +103,7 @@ export default function InitialPageJobs() {
                             <span className="font-medium">Benefícios:</span>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            {job.benefits.map((benefit, index) => (
+                            {job.benefits.map((benefit: string, index: number) => (
                             <Badge key={index} variant="secondary">
                                 {benefit}
                             </Badge>
@@ -95,7 +114,7 @@ export default function InitialPageJobs() {
                     <CardFooter>
                         <Dialog>
                         <DialogTrigger asChild>
-                            <Button className="w-full">Candidatar-se</Button>
+                            <Button variant='link' className="w-full">Candidatar-se</Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
@@ -145,8 +164,8 @@ export default function InitialPageJobs() {
         <div className='flex flex-1'>
         <Button 
             className="bg-blue-600 p-4 rounded-md w-52 m-auto mb-24" 
-            onClick={handleShowMore}>
-            {showAll ? "Ver menos" : "Ver mais"}
+            onClick={toggleViewMore}>
+            {jobs ? "Ver menos" : "Ver mais"}
         </Button>
         </div>
         <Footer />
