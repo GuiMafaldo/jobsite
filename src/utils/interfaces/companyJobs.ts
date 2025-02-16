@@ -14,6 +14,23 @@ interface Jobs {
     requirements: string
     contract: string
     level?: string | any
+    company?: string
+    status?: any
+}
+interface JobsUser {
+  id?: string
+  company_id?: string,
+  title: string,
+  description: string,
+  salary: string,
+  benefits: any,
+  location: string,
+  model: string
+  requirements: string
+  contract: string
+  level?: string | any
+  company?: string
+  status?:  any
 }
 
 interface CompanyData {
@@ -26,10 +43,4 @@ interface CompanyData {
     description: string,
   }
 
-  interface Candidates {
-    candidate: string
-    create_at: string
-    status: string
-
-  }
 

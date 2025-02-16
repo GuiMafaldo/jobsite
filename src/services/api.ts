@@ -67,11 +67,15 @@ export const userLogin = async ({ email, password, user}: { email: string, passw
                 console.error('sabado name nao foi enviado')
             }
 
-        if (data?.token) {
-            localStorage.setItem('tokenUser', data.token);
-        } else {
-            console.error('Erro ao tentar fazer login: Token não encontrado');
-        }
+            if (data?.token) {
+                localStorage.setItem('tokenUser', data.token);
+            } else {
+                console.error('Erro ao tentar fazer login: Token não encontrado');
+            }
+            if(!data.user_id) {
+                localStorage.setItem('userId', data.userId)
+                console.log(data.userId)
+            }
     } catch(exe) {
         console.error('Erro ao capturar o token do usuario:', exe)
     }
@@ -116,7 +120,7 @@ export const submitUserProfile = async (profile: UserProfile) => {
 // # SUBMIT JOBS
 export const submitJob = async (jobs: Jobs) => {
     const token = localStorage.getItem('tokenCompany')
-    const data  = await apiRequest("company/pJob", 'POST', jobs, token)
+    const data  = await apiRequest("company/sendJob", 'POST', jobs, token)
 
     try {
         if(data.success) {  
@@ -136,13 +140,14 @@ export const updateJob = async (id: string, updatedFields: Partial<Jobs>) => {
 
     if (!token) {
         console.error('Token da empresa não encontrado. Usuário não autenticado.');
-        console.log(token)
+        //console.log(token)
         return;
     }
 
     try {
+
         // Passo 1: Obter os dados atuais da vaga
-        const currentJob = await apiRequest(`company/pJob/${id}`, 'GET', undefined, token);
+        const currentJob = await apiRequest(`company/getJob/${id}`,'GET',undefined, token);
 
         if (!currentJob) {
             console.error('Erro ao buscar os dados da vaga.');
@@ -154,30 +159,63 @@ export const updateJob = async (id: string, updatedFields: Partial<Jobs>) => {
         const updatedJob = { ...currentJob, ...updatedFields };
 
         // Passo 3: Fazer o PUT com os novos dados
-        const response = await apiRequest(`company/jobs/${id}`, 'PUT',  updatedJob, token);
+        const response = await apiRequest(`company/upJob/${id}`,'PUT', updatedJob, token);
 
-        if (!response.jobId) {
+
+
+        if (response.jobId || !updateJob) {
             console.error('Erro ao atualizar a vaga:', response);
         } else {
             console.log('Vaga atualizada com sucesso!', response);
         }
-    } catch (error) {
-        console.error('Erro ao atualizar a vaga:', error);
+    } catch (exe) {
+        console.error('Erro ao atualizar a vaga:', exe);
     }
 };
-        
+
         
 
 // # PEGA TODAS AS VAGAS QUE POSSUEM CANDIDATOS
-export const getJobsWithCandidates = async(jobId?: string): Promise<Candidates[]> =>{
-    const token = localStorage.getItem('tokenCompany')
-    const tknc = localStorage.getItem('tokenJob')
-
+export const getJobsWithCandidates = async() => {
+    const token = localStorage.getItem('tokenUser')
+    const userId = localStorage.getItem('userId')
     if(!token) {
         throw new Error("Token nao encontrado.")
     }
-    return apiRequest(`company/jobs/:${tknc}/candidates`, 'GET', undefined, token)
+
+    try {
+        const data = await apiRequest(`company/aJob/${userId}/applied`, 'GET', undefined, token)
+
+        if(data.user_id) {
+            console.log(data.user_id)
+        }
+        return data     
+
+    }catch(exe) {
+        console.error('Erro ao pegar vagas no backend!')
+    }
 } 
+
+
+// #  CADASTRO NAS VAGAS
+export const sendApplication = async(id: JobsUser) => {
+    const token = localStorage.getItem('tokenUser')
+
+    try {
+        const data = await apiRequest(`company/rJob/${id}`, "POST", undefined, token)
+        console.log(data.job_id)
+
+        if(!data || !data.job_id) {
+            console.log("Dados recebidos",data)
+        }
+        return data
+    }catch(exe) {
+        console.error("Nao foi possivel Candidatar-se a vaga.")
+        return null
+
+    }
+
+}
 
        
 // # PEGAS AS VAGAS SOMENTE DA EMPRESA AUTHENTICADA
@@ -190,7 +228,7 @@ export const getJobsCompany = async (): Promise<Jobs[]> => {
     }
     try {
         
-        const response = await apiRequest("company/gJob", 'GET', undefined, token)
+        const response = await apiRequest("company/getJob", 'GET', undefined, token)
 
         if (response && typeof response === 'object' && 'jobs' in response) {
             // VERIFICA SI A RESPOSTA DA API E UM ARRAY
@@ -214,7 +252,9 @@ export const getJobsCompany = async (): Promise<Jobs[]> => {
     }
 }
 
-export const deleteJobs = async(id: string): Promise<Jobs[]> => {
+
+// # DELETE DE VAGAS
+export const deleteJobs = async(id: string) => {
     const token = localStorage.getItem('tokenCompany')
 
     if(!token) {
@@ -223,19 +263,11 @@ export const deleteJobs = async(id: string): Promise<Jobs[]> => {
     }
     try {
 
-        const response = await apiRequest(`company/dJob/${id}`, 'DELETE', undefined, token)
+        const response = await apiRequest(`company/delJob/${id}`, 'DELETE', undefined, token)
 
-        if(response && typeof response === 'object' && 'jobs' in response) {
-
-            if(Array.isArray(response.jobs)) {
-                console.log(response.jobs)
-                return response.jobs
-
-            } else if(typeof response.jobs === 'object') {
-                return [response.jobs]
-            }
+        if(response.success) {
+            console.log("Vaga deletada com sucesso!")
         }
-        throw new Error("Formato de resposta invalido")
         
     } catch(exe) {
         console.error('Erro ao buscar vaga', exe)
@@ -250,7 +282,7 @@ export const deleteJobs = async(id: string): Promise<Jobs[]> => {
 export const getAllJobs = async(): Promise<Jobs[]> => {
 
     try {
-        const response = await apiRequest("company/jobs", "GET", undefined)
+        const response = await apiRequest("company/allJobs", "GET", undefined)
 
         if(response && typeof response === 'object' && 'jobs' in response) {
             if (Array.isArray(response.jobs)) {

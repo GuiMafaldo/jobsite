@@ -39,7 +39,7 @@ export function LoginModal() {
         if (response && response.token) {
           localStorage.setItem('company', mailCompany.split('@')[0])
           localStorage.setItem('token', response.token)
-          router.push('/dashboard/companyHome')
+          router.push('/dashboard/company')
         } else {
           setError('Credenciais inválidas')
         }
@@ -48,7 +48,7 @@ export function LoginModal() {
         if (response && response.token) {
           localStorage.setItem('mail', mailUser)
           localStorage.setItem('token', response.token)
-          router.push('/dashboard/userHome')
+          router.push('/dashboard/users')
         } else {
           setError('Credenciais inválidas')
         }

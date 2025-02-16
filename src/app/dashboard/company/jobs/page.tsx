@@ -81,8 +81,8 @@ const handleDeleteJob = async (job: Jobs | any) => {
     <TabsContent value="jobs">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-2xl">Vagas com candidaturas</CardTitle>
-          <CardDescription>Acompanhe as candidaturas nas suas vagas postadas.</CardDescription>
+          <CardTitle className="text-2xl">Vagas postadas</CardTitle>
+          <CardDescription>Gerencie suas vagas no painel abaixo</CardDescription>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[auto] pr-4 mb-4">

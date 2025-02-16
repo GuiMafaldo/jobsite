@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge"
 import { MessageSquare } from "lucide-react"
 import { getJobsWithCandidates } from "@/services/api"
 import { TabsContent } from "@radix-ui/react-tabs"
+import { jobPostings } from "@/utils/mockvagas"
 
 
 
@@ -27,11 +28,12 @@ const SubscribesInJobs = () => {
   const [applications, setApplications] = useState<Candidates[] | any>([])
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(true)
+  const [job, setJobs] = useState<JobsUser[] | any>([])
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await getJobsWithCandidates()
+        const response = await getJobsWithCandidates(job)
         setApplications(response)
       } catch (error) {
         console.error("Erro ao carregar as candidaturas:", error)

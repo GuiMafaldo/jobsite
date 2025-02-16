@@ -1,8 +1,13 @@
 "use client"
 import { useEffect, useState } from "react"
 import { submitJob } from "@/services/api"
+
 import Footer from "@/components/footer"
 import CompanyHomeHeader from "@/components/Headers/companyHome-header"
+import JobCompany from "./jobs/page"
+import CandidatesAtJobs from "./candidates/page"
+
+import PopupConfirmacao from "@/utils/functions/popup"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,12 +16,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
 import { Briefcase, Users, PlusCircle } from "lucide-react"
-import JobCompany from "./jobs/page"
-import CandidatesAtJobs from "./candidates/page"
 
 
 export default function CompanyDashboard() {
   const [tagBenefits, setTagBenefits] = useState("")
+  const [openPopup, setOpenPopup] = useState(false)
+  const [message, setMessage] = useState('')
   const [newJob, setNewJob] = useState<Jobs>({
     company: '',
     title: "",
@@ -65,8 +70,8 @@ export default function CompanyDashboard() {
       const res = await submitJob(newJob)
 
       if (res) {
-        alert("Vaga cadastrada com sucesso.")
-        console.log("Posting new job:", newJob)
+        setMessage("Vaga cadastrada com sucesso")
+        setOpenPopup(true)
   
         setNewJob({
           company:"",
@@ -80,13 +85,17 @@ export default function CompanyDashboard() {
           requirements: "",
         })
       } else {
-        alert("Erro ao cadastrar a vaga, tente novamente.")
-        console.log(newJob)
+        setMessage("Erro ao cadastrar vaga. Tente novamente.")
+        setOpenPopup(true)
       }
     } catch (exe) {
+      setMessage("Erro ao cadatrar vaga. Tente novamente")
       console.error("Erro ao cadastrar vaga, verifique os campos necessários:", exe)
-      alert("Ocorreu um erro inesperado. Tente novamente.")
+      setOpenPopup(true)
     }
+  }
+  const closePopup = () => {
+    setOpenPopup(false)
   }
 
  
@@ -262,10 +271,16 @@ export default function CompanyDashboard() {
                     />
                   </div>
          
-                  <Button type="submit" className="w-44 flex m-auto">
+                  <Button type="submit" className="w-44 flex bg-blue-500 m-auto">
                     Publicar Vaga
                   </Button>
                 </form>
+                {openPopup ? (
+                  <PopupConfirmacao
+                    mensagem={message}
+                    onFechar={closePopup} 
+                  />
+                ):''}
               </CardContent>
             </Card>
           </TabsContent>

@@ -1,7 +1,7 @@
 'use client'
 
 import InitialPageHeader from "@/components/Headers/initialPage-header";
-import PartnersAndJobs from "../../../../components/Company/partnesAndJobs";
+import PartnersAndJobs from "../../../components/Company/partnesAndJobs";
 import Footer from "@/components/footer";
 
 import {useEffect} from 'react'

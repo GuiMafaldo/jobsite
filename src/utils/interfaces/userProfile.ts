@@ -11,7 +11,7 @@ interface UserProfile {
     phone: string
     birth_date: string
     education: string
-    profile_image?: File | string
+    profile_image?: string
     address:{
         street: string
         city: string

@@ -18,17 +18,19 @@ export default function PerfilEmprego() {
   }, []);
 
   const [perfil, setPerfil] = useState<UserProfile>({
-    fullname: '',
+    document_number:'',
+    education:"",
+    profile_image: '',
     phone: '',
     birth_date: '',
     address: {
       street: '',
       city: '',
       state: '',
-      code_postal: ''
+      zip_code: '',
+      country:''
     },
     experiences: [],
-    photo: ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,7 +54,7 @@ export default function PerfilEmprego() {
     }));
   };
 
-  const adicionarExperiencia = () => {
+/*   const adicionarExperiencia = () => {
     setPerfil((prev) => ({
       ...prev,
       experiences: [
@@ -60,7 +62,7 @@ export default function PerfilEmprego() {
         { enterprise: '', function: '', period: '', description: '' }
       ]
     }));
-  };
+  }; */
 
   const removerExperiencia = (index: number) => {
     setPerfil((prev) => ({
@@ -110,10 +112,6 @@ export default function PerfilEmprego() {
             {/* Aba de Dados Pessoais */}
             <TabsContent value="pessoal">
               <div className="space-y-4">
-                <div>
-                  <Label htmlFor="nome">Nome Completo</Label>
-                  <Input id="nome" name="fullname" value={perfil.fullname} onChange={handleInputChange} />
-                </div>
                 <div>
                   <Label htmlFor="telefone">Telefone</Label>
                   <Input id="telefone" name="phone" value={perfil.phone} onChange={handleInputChange} />
@@ -166,7 +164,7 @@ export default function PerfilEmprego() {
                   <Input
                     id="cep"
                     name="address.code_postal"
-                    value={perfil.address.code_postal}
+                    value={perfil.address.zip_code}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -184,7 +182,7 @@ export default function PerfilEmprego() {
                           <Label htmlFor={`empresa-${index}`}>Empresa</Label>
                           <Input
                             id={`empresa-${index}`}
-                            value={exp.enterprise}
+                            value={exp.company_name}
                             onChange={(e) => handleExperienciaChange(index, 'enterprise', e.target.value)}
                           />
                         </div>
@@ -192,7 +190,7 @@ export default function PerfilEmprego() {
                           <Label htmlFor={`cargo-${index}`}>Cargo</Label>
                           <Input
                             id={`cargo-${index}`}
-                            value={exp.function}
+                            value={exp.role}
                             onChange={(e) => handleExperienciaChange(index, 'function', e.target.value)}
                           />
                         </div>
@@ -200,7 +198,15 @@ export default function PerfilEmprego() {
                           <Label htmlFor={`periodo-${index}`}>Período</Label>
                           <Input
                             id={`periodo-${index}`}
-                            value={exp.period}
+                            value={exp.start_date}
+                            onChange={(e) => handleExperienciaChange(index, 'period', e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`periodo-${index}`}>Período</Label>
+                          <Input
+                            id={`periodo-${index}`}
+                            value={exp.end_date}
                             onChange={(e) => handleExperienciaChange(index, 'period', e.target.value)}
                           />
                         </div>
@@ -219,7 +225,7 @@ export default function PerfilEmprego() {
                     </CardContent>
                   </Card>
                 ))}
-                <Button onClick={adicionarExperiencia}>Adicionar Experiência</Button>
+                <Button>Adicionar Experiência</Button>
               </div>
             </TabsContent>
 
@@ -227,7 +233,7 @@ export default function PerfilEmprego() {
             <TabsContent value="foto">
               <div className="space-y-4">
                 <Avatar className="w-32 h-32 mx-auto">
-                  <AvatarImage src={perfil.photo || ''} alt="Foto de perfil" />
+                  <AvatarImage src={perfil.profile_image || ''} alt="Foto de perfil" />
                   <AvatarFallback>Foto</AvatarFallback>
                 </Avatar>
                 <div>

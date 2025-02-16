@@ -1,10 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
-import { Jobs } from "../../../types";
 
 export default function ApplicationStatus() {
-  const savedJobs = useSelector((state: RootState) => state.jobs.savedJobs);
+
 
   return (
     <Card>
@@ -13,27 +10,20 @@ export default function ApplicationStatus() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {savedJobs && savedJobs.length > 0 ? (
-            savedJobs.map((application) => (
+          
               <div
-                key={application.id}
+               
                 className="flex justify-between items-center border-b pb-4 last:border-b-0 last:pb-0"
               >
                 <div>
-                  <h3 className="font-semibold text-lg">{application.title}</h3>
-                  <p className="text-sm text-gray-600">{application.company}</p>
+                  <h3 className="font-semibold text-lg">{}</h3>
+                  <p className="text-sm text-gray-600">{}</p>
                 </div>
                 <div
-                  className={`flex justify-center items-center h-6 px-4 rounded-sm text-white font-bold bg-${getStatusColor}`}
-            
-                >
+                  className={`flex justify-center items-center h-6 px-4 rounded-sm text-white font-bold bg-${getStatusColor}`}>
                 </div>
                   <span></span>
-              </div>
-            ))
-          ) : (
-            <p>Nenhuma vaga ainda</p>
-          )}
+                  </div>
         </div>
       </CardContent>
     </Card>
