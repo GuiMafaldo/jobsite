@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { TabsContent } from "@radix-ui/react-tabs";
-import { Briefcase, Banknote, Building2, MapPin, GraduationCap, Gift, FileText, Trash, Pencil } from "lucide-react";
+import { Briefcase, Banknote, Building2, MapPin, GraduationCap, Gift, FileText, Trash, Pencil, CheckCircle2 } from "lucide-react";
 
 export default function JobCompany() {
   const [moreView, setMoreView] = useState(false);
@@ -118,7 +118,13 @@ const handleDeleteJob = async (job: Jobs | any) => {
                           <span className="line-clamp-2">{job.requirements}</span>
                         </span>
                       </div>
-                      <div className="mt-12">
+                      <div className="mt-2">
+                        <span className="flex items-center gap-1">
+                          <CheckCircle2 className="h-4 w-4 flex-shirink-0" />
+                          <span>{job.status}</span>
+                        </span>
+                      </div>
+                      <div className="mt-3">
                         <span className="flex items-center gap-1">
                           <Gift className="h-4 w-4 flex-shrink-0" />
                           <span className="line-clamp-2 h-4 flex-wrap text-xs gap-3 flex">

@@ -29,4 +29,12 @@ interface Credentials {
     confirmPass?: string 
 }
 
+interface Applied {
+    job_title: string
+    job_localy: string
+    application_status: string
+    applied_date: string
+    job_benefits: []
+
+}
 

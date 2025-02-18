@@ -32,6 +32,7 @@ export default function CompanyDashboard() {
     requirements: "",
     model: "Temporario",
     contract: "Presencial",
+    status: 'Aberta'
   })
 
   const handleCompany = localStorage.getItem('company')
@@ -60,7 +61,6 @@ export default function CompanyDashboard() {
 
   const handleSubmitJob = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     if (!newJob.title || !newJob.description) {
       alert("Título e descrição são obrigatórios.")
       return

@@ -17,24 +17,22 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { MessageSquare } from "lucide-react"
-import { getJobsWithCandidates } from "@/services/api"
+import { candidatesAtJobs } from "@/services/api"
 import { TabsContent } from "@radix-ui/react-tabs"
-import { jobPostings } from "@/utils/mockvagas"
-
-
 
 
 const SubscribesInJobs = () => {
-  const [applications, setApplications] = useState<Candidates[] | any>([])
+  const [applications, setApplications] = useState<Candidates | any>([])
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(true)
-  const [job, setJobs] = useState<JobsUser[] | any>([])
+ 
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await getJobsWithCandidates(job)
+        const response = await candidatesAtJobs()
         setApplications(response)
+        console.log("Isso esta sendo passado aqui", response)
       } catch (error) {
         console.error("Erro ao carregar as candidaturas:", error)
         alert("Erro ao carregar as candidaturas. Tente novamente.")
@@ -42,7 +40,6 @@ const SubscribesInJobs = () => {
         setLoading(false)
       }
     }
-
     fetchApplications()
   }, [])
 
@@ -66,29 +63,32 @@ const SubscribesInJobs = () => {
           <ScrollArea className="h-[600px] pr-4">
             {applications && applications.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {applications.map((app: any) => (
-                  <Card key={app.id} className="flex flex-col justify-between">
+                {applications.map((app: any, index: any) => (
+                  <Card key={index} className="flex flex-col justify-between">
                     <CardHeader>
+                      <div className="flex items-center m-auto">
+                          <CardTitle>{app.job_title}</CardTitle>
+                      </div>
                       <div className="flex items-center space-x-4">
                         <Avatar>
-                          <AvatarImage src={app.avatar} alt={app.name} />
-                          <AvatarFallback>{app.name.substring(0, 2)}</AvatarFallback>
+                          <AvatarImage src={app.avatar} alt="Avatar usuario" />
+                          <AvatarFallback>{app.username.substring(0, 2)}</AvatarFallback>
                         </Avatar>
-                        <div>
-                          <CardTitle>{app.name}</CardTitle>
-                          <CardDescription>{app.job}</CardDescription>
-                        </div>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Badge variant="outline">Status</Badge>
-                          <span className="text-sm text-muted-foreground">{app.status}</span>
+                          <Badge variant='outline'>Nome:</Badge>
+                          <span className="text-sm text-muted-foreground">{app.username}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <Badge variant="outline">Data da Candidatura</Badge>
-                          <span className="text-sm text-muted-foreground">{app.appliedDate}</span>
+                          <Badge variant="outline">Status:</Badge>
+                          <span className="text-sm text-muted-foreground">{app.application_status}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline">Data da Candidatura:</Badge>
+                          <span className="text-sm text-muted-foreground">{new Date(app.applied_date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}</span>
                         </div>
                       </div>
                     </CardContent>

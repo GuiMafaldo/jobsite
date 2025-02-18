@@ -5,9 +5,9 @@ import DashboardHeader from "@/components/Headers/userHome-header";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, DollarSign, GraduationCap, FileText, MapPin, Gift } from "lucide-react";
+import { Briefcase, DollarSign, GraduationCap, FileText, MapPin, Gift, CheckCircle2Icon } from "lucide-react";
 import { getAllJobs, sendApplication } from "@/services/api";
 
 export default function JobForm() {  
@@ -19,6 +19,7 @@ export default function JobForm() {
   const [moreView, setMoreView] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Jobs | any>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [succes, setSuccess] = useState(false)
 
   const viewJobs = moreView ? jobs : jobs.slice(0, 10);
 
@@ -40,21 +41,28 @@ export default function JobForm() {
     renderJobs();
   }, []);
 
-  const handleRegister = async (job: Jobs) => {
+  const handleRegister = async (jobId: Candidates | any) => {
+
+    if(!jobId) {
+      console.log("id nao encontrado e ou status nao disponiveis")
+      return
+    }
     try {
-      const response = await sendApplication(job);
-      if (response.success) {
-        setSelectedJob(job.id);
-        console.log(job.id)
+      const response = await sendApplication(jobId);
+      if (response && response.success) {
+        const job = jobs.find((added) => added.id === jobId)
+        setSelectedJob(job);
+        setSuccess(true)
         setIsDialogOpen(true);
       } else {
-        alert("Erro ao se candidatar. Tente novamente.");
+        setIsDialogOpen(true)
       }
     } catch (error) {
       console.error("Erro ao se candidatar:", error);
       alert("Erro ao se candidatar.");
     }
-  };
+  }
+
 
   const handleFilter = () => {
     const filteredJobs = viewJobs.filter((job) => {
@@ -88,6 +96,10 @@ export default function JobForm() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <h2 className="flex text-xl text-black justify-center">{job.title}</h2>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2Icon  className="h5 w-5 text-gray-500"/>
+                       <span className="font-medium text-sm">{job.status}</span>
+                    </div>
                     <CardDescription className="text-lg flex items-center space-x-2 mt-4">
                       <MapPin className="h-5 w-5 text-gray-500" />
                       <span className="font-medium text-black text-sm">{job.location}</span>
@@ -118,8 +130,8 @@ export default function JobForm() {
                     </div>
                   </CardContent>
                   <CardFooter className="flex flex-1 justify-end">
-                    <Button className="font-bold" onClick={() => handleRegister(job)}>
-                      Candidatar-se
+                    <Button className="font-bold" onClick={() => handleRegister(job.id!)}>
+                      {succes ? 'Ja inscrito': 'Candidatar-se'}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -141,7 +153,17 @@ export default function JobForm() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Ja inscrito!</DialogTitle>
+            <DialogDescription>
+              Você ja esta incrito nesta vaga.
+            </DialogDescription>
+            <Button onClick={() => setIsDialogOpen(false)}>Fechar</Button>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       <Footer />
     </section>
   );
